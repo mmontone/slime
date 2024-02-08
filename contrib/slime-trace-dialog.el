@@ -515,16 +515,17 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
           (if (cl-plusp depth) suffix)))
 
 (defun slime-trace-dialog--make-collapse-button (trace)
-  (slime-trace-dialog--button (if (slime-trace-dialog--trace-collapsed-p trace)
-                                  (cdr slime-trace-dialog--collapse-chars)
-                                (car slime-trace-dialog--collapse-chars))
-                              #'(lambda (button)
-                                  (slime-trace-dialog--set-collapsed
-                                   (not (slime-trace-dialog--trace-collapsed-p
-                                         trace))
-                                   trace
-                                   button))))
-
+  "Make a collapse button for TRACE."
+  (slime-trace-dialog--button
+   (if (slime-trace-dialog--trace-collapsed-p trace)
+       (cdr slime-trace-dialog--collapse-chars)
+     (car slime-trace-dialog--collapse-chars))
+   #'(lambda (button)
+       (slime-trace-dialog--set-collapsed
+        (not (slime-trace-dialog--trace-collapsed-p
+              trace))
+        trace
+        button))))
 
 (defun slime-trace-dialog--insert-trace (trace)
   (let* ((id (slime-trace-dialog--trace-id trace))
