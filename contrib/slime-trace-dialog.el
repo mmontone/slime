@@ -246,9 +246,9 @@ Possible values are a boolean, or a function to be used for the fetch."
   (let ((buffer-or-name (or buffer-or-name
                             (slime-trace-dialog--buffer-name))))
     (and (buffer-live-p (get-buffer buffer-or-name))
-       (with-current-buffer buffer-or-name
-         (memq slime-buffer-connection slime-net-processes))
-       buffer-or-name)))
+         (with-current-buffer buffer-or-name
+           (memq slime-buffer-connection slime-net-processes))
+         buffer-or-name)))
 
 (defun slime-trace-dialog--ensure-buffer ()
   (let ((name (slime-trace-dialog--buffer-name)))
@@ -763,8 +763,8 @@ Possible values are a boolean, or a function to be used for the fetch."
              (slime-eval-async `(swank-trace-dialog:report-partial-tree
                                  ',reply-key)
                #'(lambda (results) (slime-trace-dialog--on-new-results
-                                    results
-                                    recurse))))))))
+                               results
+                               recurse))))))))
 
 
 ;;;; Interactive functions
@@ -813,7 +813,7 @@ and no FETCH-TRACES argument is passed."
   (slime-eval-async `(swank-trace-dialog:report-partial-tree
                       ',slime-trace-dialog--fetch-key)
     #'(lambda (results) (slime-trace-dialog--on-new-results results
-                                                            recurse))))
+                                                       recurse))))
 
 (defun slime-trace-dialog-next-button (&optional goback)
   (interactive)
@@ -832,7 +832,7 @@ and no FETCH-TRACES argument is passed."
 (defun slime-trace-dialog-toggle-backtraces (&optional arg)
   "Toggle the recording of backtraces of traced calls.
 Beware that the enabling of backtraces can have a performance impact in your program. "
-  (interactive 
+  (interactive
    (list
     (if current-prefix-arg
         (prefix-numeric-value current-prefix-arg)
@@ -843,13 +843,13 @@ Beware that the enabling of backtraces can have a performance impact in your pro
                 ((< arg 0)
                  'cl:nil)
                 (t 'cl:t))))
-  (let ((result
-         (slime-eval `(cl:setq swank-trace-dialog:*record-backtrace*
-                               ,value))))
-    (message
-     (if result
-         "Backtraces enabled"
-       "Backtraces disabled")))))
+    (let ((result
+           (slime-eval `(cl:setq swank-trace-dialog:*record-backtrace*
+                                 ,value))))
+      (message
+       (if result
+           "Backtraces enabled"
+         "Backtraces disabled")))))
 
 (defvar slime-trace-dialog-after-toggle-hook nil
   "Hooks run after toggling a dialog-trace")
