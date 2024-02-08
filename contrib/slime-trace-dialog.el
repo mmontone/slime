@@ -24,6 +24,15 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
 
 ;;;; Variables
 ;;;
+
+(defgroup slime-trace-dialog nil
+  "SLIME trace dialog settings.")
+
+(defcustom slime-trace-dialog-start-collapsed t
+  "If traces should be shown collapsed by default."
+  :type 'boolean
+  :group 'slime-trace-dialog)
+
 (defvar slime-trace-dialog-flash t
   "Non-nil means flash the updated region of the SLIME Trace Dialog. ")
 
@@ -110,7 +119,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
     map))
 
 (define-minor-mode slime-trace-dialog-minor-mode
-  "Add keybindings for accessing SLIME's Trace Dialog.")
+  "Add keybindings for accessing SLIME's Trace Dialog."
+  (slime-trace-dialog-hide-details-mode))
 
 (defun slime-trace-dialog-enable ()
   (slime-trace-dialog-minor-mode 1))
@@ -694,7 +704,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                             :depth (if parent
                                        (1+ (slime-trace-dialog--trace-depth
                                             parent))
-                                     0))
+                                     0)
+                            :collapsed-p slime-trace-dialog-start-collapsed)
                do (slime-trace-dialog--render-trace trace)))))
 
 (defun slime-trace-dialog--clear-local-tree ()
