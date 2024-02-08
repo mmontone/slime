@@ -797,7 +797,10 @@ Beware that the enabling of backtraces can have a performance impact in your pro
   (let ((result
          (slime-eval `(cl:setq swank-trace-dialog:*record-backtrace*
                                ,value))))
-    (message (format "Backtraces enabled: %s" result)))))
+    (message
+     (if result
+         "Backtraces enabled"
+       "Backtraces disabled")))))
 
 (defvar slime-trace-dialog-after-toggle-hook nil
   "Hooks run after toggling a dialog-trace")
