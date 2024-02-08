@@ -389,6 +389,10 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                                    (lambda (_btn)
                                      (call-interactively #'slime-trace-dialog-autofollow-mode)))
        " "
+       (slime-trace-dialog--button "[toggle backtraces]"
+                                   (lambda (_btn)
+                                     (call-interactively #'slime-trace-dialog-toggle-backtraces)))
+       " "
        (slime-trace-dialog--button "[help]"
                                    (lambda (_btn)
                                      (slime-trace-dialog--open-help-buffer)))
