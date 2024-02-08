@@ -567,11 +567,7 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
     (setf (slime-trace-dialog--trace-beg trace) (point-marker))
     (insert id-string " ")
     (insert indent-spec)
-    (if has-children-p
-        (insert (slime-trace-dialog--make-collapse-button trace))
-      (setf (slime-trace-dialog--trace-collapse-button-marker trace)
-            (point-marker))
-      (insert "-"))
+    (insert (slime-trace-dialog--make-collapse-button trace))
     (insert (format " %s\n" spec))
     (setf (slime-trace-dialog--trace-summary-beg trace) (point-marker))
     (insert summary)
