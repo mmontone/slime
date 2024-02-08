@@ -26,7 +26,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
 ;;;
 
 (defgroup slime-trace-dialog nil
-  "SLIME trace dialog settings.")
+  "SLIME trace dialog settings."
+  :group 'slime)
 
 (defcustom slime-trace-dialog-start-collapsed t
   "If traces should be shown collapsed by default."
@@ -36,10 +37,12 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
 (defcustom slime-trace-dialog-fetch-on-refresh nil
   "Fetch traces when dialog is refreshed if enabled.
 Possible values are a boolean, or a function to be used for the fetch."
+  :type 'boolean
   :group 'slime-trace-dialog)
 
 (defcustom slime-trace-dialog-fetch-on-start t
   "Fetch traces on start"
+  :type 'boolean
   :group 'slime-trace-dialog)
 
 (defvar slime-trace-dialog-flash t
@@ -134,6 +137,10 @@ Possible values are a boolean, or a function to be used for the fetch."
 (defun slime-trace-dialog-enable ()
   (slime-trace-dialog-minor-mode 1))
 
+(defun slime-trace-dialog-customize ()
+  (interactive)
+  (customize-group 'slime-trace-dialog))
+
 (easy-menu-define slime-trace-dialog--menubar (list slime-trace-dialog-minor-mode-map
                                                     slime-trace-dialog-mode-map)
   "A menu for accessing some features of SLIME's Trace Dialog"
@@ -141,7 +148,7 @@ Possible values are a boolean, or a function to be used for the fetch."
          (dialog-live `(and ,in-dialog
                             (memq slime-buffer-connection slime-net-processes)))
          (connected '(slime-connected-p)))
-    `("Trace"
+    `("SLIME Trace"
       ["Toggle trace" slime-trace-dialog-toggle-trace ,connected]
       ["Trace complex spec" slime-trace-dialog-toggle-complex-trace ,connected]
       ["Open Trace dialog" slime-trace-dialog (and ,connected (not ,in-dialog))]
@@ -152,6 +159,8 @@ Possible values are a boolean, or a function to be used for the fetch."
       [ "Toggle details" slime-trace-dialog-hide-details-mode ,in-dialog]
       [ "Toggle autofollow" slime-trace-dialog-autofollow-mode ,in-dialog]
       [ "Toggle backtraces" slime-trace-dialog-toggle-backtraces 'toggle]
+      "--"
+      [ "Customize ..." slime-trace-dialog-customize]
       )))
 
 (define-minor-mode slime-trace-dialog-hide-details-mode
