@@ -5,6 +5,8 @@
 ;;; TODO: implement better wrap interface for sbcl method, labels and such
 ;;; TODO: backtrace printing is very slow
 ;;;
+;;; Code:
+
 (require 'slime)
 (require 'slime-parse)
 (require 'slime-repl)
@@ -41,12 +43,12 @@ Possible values are a boolean, or a function to be used for the fetch."
   :group 'slime-trace-dialog)
 
 (defcustom slime-trace-dialog-fetch-on-start t
-  "Fetch traces on start"
+  "Fetch traces on start."
   :type 'boolean
   :group 'slime-trace-dialog)
 
 (defvar slime-trace-dialog-flash t
-  "Non-nil means flash the updated region of the SLIME Trace Dialog. ")
+  "Non-nil means flash the updated region of the SLIME Trace Dialog.")
 
 (defvar slime-trace-dialog--specs-overlay nil)
 
@@ -76,6 +78,7 @@ Possible values are a boolean, or a function to be used for the fetch."
   collapsed-p)
 
 (defun slime-trace-dialog--find-trace (id)
+  "Get trace by ID."
   (gethash id slime-trace-dialog--traces))
 
 
@@ -103,7 +106,7 @@ Possible values are a boolean, or a function to be used for the fetch."
     map))
 
 (define-derived-mode slime-trace-dialog-mode fundamental-mode
-  "SLIME Trace Dialog" "Mode for controlling SLIME's Trace Dialog"
+  "SLIME Trace Dialog" "Mode for controlling SLIME's Trace Dialog."
   (set-syntax-table lisp-mode-syntax-table)
   (read-only-mode 1)
   (add-to-list (make-local-variable 'slime-trace-dialog-after-toggle-hook)
@@ -111,7 +114,7 @@ Possible values are a boolean, or a function to be used for the fetch."
 
 (define-derived-mode slime-trace-dialog--detail-mode slime-inspector-mode
   "SLIME Trace Detail"
-  "Mode for viewing a particular trace from SLIME's Trace Dialog")
+  "Mode for viewing a particular trace from SLIME's Trace Dialog.")
 
 (setq slime-trace-dialog--detail-mode-map
       (let ((map (make-sparse-keymap))
@@ -135,15 +138,17 @@ Possible values are a boolean, or a function to be used for the fetch."
   (slime-trace-dialog-hide-details-mode))
 
 (defun slime-trace-dialog-enable ()
+  "Enable trace dialog."
   (slime-trace-dialog-minor-mode 1))
 
 (defun slime-trace-dialog-customize ()
+  "Customize slime-trace-dialog."
   (interactive)
   (customize-group 'slime-trace-dialog))
 
 (easy-menu-define slime-trace-dialog--menubar (list slime-trace-dialog-minor-mode-map
                                                     slime-trace-dialog-mode-map)
-  "A menu for accessing some features of SLIME's Trace Dialog"
+  "A menu for accessing some features of SLIME's Trace Dialog."
   (let* ((in-dialog '(eq major-mode 'slime-trace-dialog-mode))
          (dialog-live `(and ,in-dialog
                             (memq slime-buffer-connection slime-net-processes)))
@@ -164,7 +169,7 @@ Possible values are a boolean, or a function to be used for the fetch."
       )))
 
 (define-minor-mode slime-trace-dialog-hide-details-mode
-  "Hide details in `slime-trace-dialog-mode'"
+  "Hide details in `slime-trace-dialog-mode'."
   :init-value nil
   :lighter " Brief"
   :group 'slime-trace-dialog
@@ -173,7 +178,7 @@ Possible values are a boolean, or a function to be used for the fetch."
   (slime-trace-dialog--set-hide-details-mode))
 
 (define-minor-mode slime-trace-dialog-autofollow-mode
-  "Automatically open buffers with trace details from `slime-trace-dialog-mode'"
+  "Automatically open buffers with trace details from `slime-trace-dialog-mode'."
   :init-value nil
   :lighter " Autofollow"
   :group 'slime-trace-dialog
@@ -908,7 +913,7 @@ and fetch a first batch of traces."
       (slime-trace-dialog-fetch-traces nil))))
 
 (defun slime-trace-dialog-copy-down-to-repl (id part-id type)
-  "Eval the Trace Dialog entry under point in the REPL (to set *)"
+  "Eval the Trace Dialog entry under point in the REPL (to set *)."
   (interactive (cl-loop for prop in '(slime-trace-dialog--id
                                       slime-trace-dialog--part-id
                                       slime-trace-dialog--type)
@@ -921,3 +926,5 @@ and fetch a first batch of traces."
   (slime-repl))
 
 (provide 'slime-trace-dialog)
+
+;;; slime-trace-dialog.el ends here
