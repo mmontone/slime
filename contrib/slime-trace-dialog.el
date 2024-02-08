@@ -34,7 +34,7 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
   :type 'boolean
   :group 'slime-trace-dialog)
 
-(defcustom slime-trace-dialog-fetch-on-refresh nil
+(defcustom slime-trace-dialog-fetch-on-refresh t
   "Fetch traces when dialog is refreshed if enabled.
 Possible values are a boolean, or a function to be used for the fetch."
   :type 'boolean
@@ -461,19 +461,20 @@ Possible values are a boolean, or a function to be used for the fetch."
        (slime-trace-dialog--format "Trace collection status (%d/%s)"
                                    done
                                    (or total "0"))
+       (slime-trace-dialog--button "[refresh and fetch]"
+                                   #'(lambda (_button)
+                                       (slime-trace-dialog-fetch-progress 'fetch)))
+       " "
        (slime-trace-dialog--button "[refresh]"
                                    #'(lambda (_button)
-                                       (slime-trace-dialog-fetch-progress)
-                                       (if slime-trace-dialog-fetch-on-refresh
-                                           (slime-trace-dialog-fetch-traces t)))))
-
+                                       (slime-trace-dialog-fetch-progress))))
       (when (and total (cl-plusp (- total done)))
         (insert "\n" (make-string 50 ? )
                 (slime-trace-dialog--button
                  "[fetch next batch]"
                  #'(lambda (_button)
                      (slime-trace-dialog-fetch-traces nil)))
-                "\n" (make-string 50 ? )
+                " "
                 (slime-trace-dialog--button
                  "[fetch all]"
                  #'(lambda (_button)
@@ -774,13 +775,21 @@ Possible values are a boolean, or a function to be used for the fetch."
   (slime-eval-async `(swank-trace-dialog:report-specs)
     #'slime-trace-dialog--open-specs))
 
-(defun slime-trace-dialog-fetch-progress ()
+(cl-defun slime-trace-dialog-fetch-progress (&optional (fetch-traces 'unset))
+  "Fetch progress of trace dialog.
+If FETCH-TRACES (boolean) is true, fetch traces after too.
+traces are also fetched if `slime-trace-dialog-fetch-on-refresh' is true
+and no FETCH-TRACES argument is passed."
   (interactive)
   (slime-eval-async
       '(swank-trace-dialog:report-total)
     #'(lambda (total)
         (slime-trace-dialog--update-progress
-         total))))
+         total)))
+  (when (if (eq fetch-traces 'unset)
+            slime-trace-dialog-fetch-on-refresh
+          fetch-traces)
+    (slime-trace-dialog-fetch-traces)))
 
 (defun slime-trace-dialog-fetch-status ()
   "Refresh just the status part of the SLIME Trace Dialog"
