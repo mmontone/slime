@@ -780,6 +780,25 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
   (interactive)
   (slime-trace-dialog-next-button 'goback))
 
+(defun slime-trace-dialog-toggle-backtraces (&optional arg)
+  "Toggle the recording of backtraces of traced calls.
+Beware that the enabling of backtraces can have a performance impact in your program. "
+  (interactive 
+   (list
+    (if current-prefix-arg
+        (prefix-numeric-value current-prefix-arg)
+      'toggle)))
+  (let ((value (cond
+                ((eq arg 'toggle)
+                 `(cl:not swank-trace-dialog:*record-backtrace*))
+                ((< arg 0)
+                 'cl:nil)
+                (t 'cl:t))))
+  (let ((result
+         (slime-eval `(cl:setq swank-trace-dialog:*record-backtrace*
+                               ,value))))
+    (message (format "Backtraces enabled: %s" result)))))
+
 (defvar slime-trace-dialog-after-toggle-hook nil
   "Hooks run after toggling a dialog-trace")
 
