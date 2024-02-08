@@ -131,7 +131,9 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
       [ "Fetch next batch" slime-trace-dialog-fetch-traces ,dialog-live]
       [ "Clear all fetched traces" slime-trace-dialog-clear-fetched-traces ,dialog-live]
       [ "Toggle details" slime-trace-dialog-hide-details-mode ,in-dialog]
-      [ "Toggle autofollow" slime-trace-dialog-autofollow-mode ,in-dialog])))
+      [ "Toggle autofollow" slime-trace-dialog-autofollow-mode ,in-dialog]
+      [ "Toggle backtraces" slime-trace-dialog-toggle-backtraces 'toggle]
+      )))
 
 (define-minor-mode slime-trace-dialog-hide-details-mode
   "Hide details in `slime-trace-dialog-mode'"
