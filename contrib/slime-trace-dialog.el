@@ -379,6 +379,20 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
     (slime-trace-dialog--refresh
         (:overlay slime-trace-dialog--specs-overlay
                   :recover-point-p t)
+      ;; Extra buttons at the top
+      (insert
+       (slime-trace-dialog--button "[toggle details]"
+                                   (lambda (_btn)
+                                     (call-interactively #'slime-trace-dialog-hide-details-mode)))
+       " "
+       (slime-trace-dialog--button "[toggle autofollow]"
+                                   (lambda (_btn)
+                                     (call-interactively #'slime-trace-dialog-autofollow-mode)))
+       " "
+       (slime-trace-dialog--button "[help]"
+                                   (lambda (_btn)
+                                     (slime-trace-dialog--open-help-buffer)))
+       "\n\n")
       (insert
        (slime-trace-dialog--format "Traced specs (%s)" (length traced-specs))
        (slime-trace-dialog--button "[refresh]"
