@@ -537,13 +537,19 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
         trace
         button))))
 
+(defvar slime-trace-dialog--indent-spec-chars
+  "╰╴╴")
+
+;; or, less fancy:
+;; (setq slime-trace-dialog--indent-spec-chars "`--")
+
 (defun slime-trace-dialog--insert-trace (trace)
   (let* ((id (slime-trace-dialog--trace-id trace))
          (parent (slime-trace-dialog--trace-parent trace))
          (has-children-p (slime-trace-dialog--trace-children-end trace))
          (indent-spec (slime-trace-dialog--make-indent
                        (slime-trace-dialog--trace-depth trace)
-                       "`--"))
+                       slime-trace-dialog--indent-spec-chars))
          (indent-summary (slime-trace-dialog--make-indent
                           (slime-trace-dialog--trace-depth trace)
                           "   "))
