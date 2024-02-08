@@ -33,6 +33,11 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
   :type 'boolean
   :group 'slime-trace-dialog)
 
+(defcustom slime-trace-dialog-fetch-on-refresh nil
+  "Fetch traces when dialog is refreshed if enabled.
+Possible values are a boolean, or a function to be used for the fetch."
+  :group 'slime-trace-dialog)
+
 (defvar slime-trace-dialog-flash t
   "Non-nil means flash the updated region of the SLIME Trace Dialog. ")
 
@@ -445,7 +450,9 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                                    (or total "0"))
        (slime-trace-dialog--button "[refresh]"
                                    #'(lambda (_button)
-                                       (slime-trace-dialog-fetch-progress))))
+                                       (slime-trace-dialog-fetch-progress)
+                                       (if slime-trace-dialog-fetch-on-refresh
+                                           (slime-trace-dialog-fetch-traces t)))))
 
       (when (and total (cl-plusp (- total done)))
         (insert "\n" (make-string 50 ? )
