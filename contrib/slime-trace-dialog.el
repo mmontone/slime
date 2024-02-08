@@ -38,6 +38,10 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
 Possible values are a boolean, or a function to be used for the fetch."
   :group 'slime-trace-dialog)
 
+(defcustom slime-trace-dialog-fetch-on-start t
+  "Fetch traces on start"
+  :group 'slime-trace-dialog)
+
 (defvar slime-trace-dialog-flash t
   "Non-nil means flash the updated region of the SLIME Trace Dialog. ")
 
@@ -882,7 +886,7 @@ and fetch a first batch of traces."
     (when (or clear-and-fetch
               (null slime-trace-dialog--fetch-key))
       (slime-trace-dialog--clear-local-tree))
-    (when clear-and-fetch
+    (when (or clear-and-fetch slime-trace-dialog-fetch-on-start)
       (slime-trace-dialog-fetch-traces nil))))
 
 (defun slime-trace-dialog-copy-down-to-repl (id part-id type)
