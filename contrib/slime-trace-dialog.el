@@ -37,8 +37,7 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
   :group 'slime-trace-dialog)
 
 (defcustom slime-trace-dialog-fetch-on-refresh t
-  "Fetch traces when dialog is refreshed if enabled.
-Possible values are a boolean, or a function to be used for the fetch."
+  "Fetch traces when dialog is refreshed if enabled."
   :type 'boolean
   :group 'slime-trace-dialog)
 
@@ -47,8 +46,10 @@ Possible values are a boolean, or a function to be used for the fetch."
   :type 'boolean
   :group 'slime-trace-dialog)
 
-(defvar slime-trace-dialog-flash t
-  "Non-nil means flash the updated region of the SLIME Trace Dialog.")
+(defcustom slime-trace-dialog-flash t
+  "Non-nil means flash the updated region of the SLIME Trace Dialog."
+  :type 'boolean
+  :group 'slime-trace-dialog)
 
 (defvar slime-trace-dialog--specs-overlay nil)
 
