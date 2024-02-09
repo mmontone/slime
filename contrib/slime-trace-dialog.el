@@ -356,13 +356,15 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
    'face 'slime-inspector-value-face))
 
 (defun slime-trace-dialog--format-trace-entry (id external)
+  "Format trace entry using a button."
   (slime-trace-dialog--button
    (format "%s" external)
    #'(lambda (_button)
        (slime-eval-async
            `(swank::inspect-object (swank-trace-dialog::find-trace ,id))
          #'slime-open-inspector))
-   'face 'slime-inspector-value-face))
+   'face 'slime-inspector-value-face
+   'help-echo "Inspect details of the trace entry."))
 
 (defun slime-trace-dialog--format (fmt-string &rest args)
   (let* ((string (apply #'format fmt-string args))
@@ -443,7 +445,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
       (insert
        (slime-trace-dialog--format "Traced specs (%s)" (length traced-specs))
        (slime-trace-dialog--button "[refresh]"
-                                   (make-report-spec-fn))
+                                   (make-report-spec-fn)
+                                   'help-echo "Refresh status of traces. Invoke pressing letter g.")
        "\n" (make-string 50 ? )
        (slime-trace-dialog--button
         "[untrace all]"
@@ -476,11 +479,13 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                                    (or total "0"))
        (slime-trace-dialog--button "[refresh and fetch]"
                                    #'(lambda (_button)
-                                       (slime-trace-dialog-fetch-progress 'fetch)))
+                                       (slime-trace-dialog-fetch-progress 'fetch))
+                                   'help-echo "Refresh and fetch all at once. Invoke pressing letter G.")
        " "
        (slime-trace-dialog--button "[refresh]"
                                    #'(lambda (_button)
-                                       (slime-trace-dialog-fetch-progress))))
+                                       (slime-trace-dialog-fetch-progress))
+                                   'help-echo "Update status of traces. Invoke pressing letter g."))
       (when (and total (cl-plusp (- total done)))
         (insert "\n" (make-string 50 ? )
                 (slime-trace-dialog--button
@@ -497,7 +502,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                 (slime-trace-dialog--button
                  "[clear]"
                  #'(lambda (_button)
-                     (slime-trace-dialog-clear-fetched-traces)))))
+                     (slime-trace-dialog-clear-fetched-traces))
+                 'help-echo "Clear all traces, both fetched and outstanding. Invoke via letter c.")))
       (when show-stop-p
         (insert "\n" (make-string 50 ? )
                 (slime-trace-dialog--button
