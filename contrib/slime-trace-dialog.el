@@ -575,7 +575,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
         (not (slime-trace-dialog--trace-collapsed-p
               trace))
         trace
-        button))))
+        button))
+   'help-echo "Show/hide trace entry details."))
 
 (defvar slime-trace-dialog--indent-spec-chars
   "╰╴╴")
@@ -601,7 +602,8 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                          (slime-eval-async
                              `(swank-trace-dialog:report-trace-detail
                                ,id)
-                           #'slime-trace-dialog--open-detail))))
+                           #'slime-trace-dialog--open-detail))
+                     'help-echo "Inspect details of this trace entry."))
          (spec (slime-trace-dialog--trace-spec trace))
          (summary (cl-loop for (type objects marker) in
                            `((:arg    ,(slime-trace-dialog--trace-args trace)
