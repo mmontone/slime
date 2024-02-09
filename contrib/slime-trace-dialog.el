@@ -571,6 +571,7 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
 ;; (setq slime-trace-dialog--indent-spec-chars "`--")
 
 (defun slime-trace-dialog--insert-trace (trace)
+  "Insert TRACE in current buffer."
   (let* ((id (slime-trace-dialog--trace-id trace))
          (parent (slime-trace-dialog--trace-parent trace))
          (has-children-p (slime-trace-dialog--trace-children-end trace))
@@ -676,8 +677,7 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
                      (slime-trace-dialog--trace-end trace))))))
 
 (defun slime-trace-dialog--render-trace (trace)
-  ;; Render the trace entry in the appropriate place.
-  ;;
+  "Render the TRACE entry in the appropriate place."
   ;; A trace becomes a few lines of slightly propertized text in the
   ;; buffer, inserted by `slime-trace-dialog--insert-trace', bound by
   ;; point markers that we use here.
@@ -814,6 +814,8 @@ and no FETCH-TRACES argument is passed."
           (slime-trace-dialog--clear-local-tree)))))
 
 (defun slime-trace-dialog-fetch-traces (&optional recurse)
+  "Fetch traces from backend.
+If RECURSE is true, fetch until there are no more to fetch."
   (interactive "P")
   (setq slime-trace-dialog--stop-fetching nil)
   (slime-eval-async `(swank-trace-dialog:report-partial-tree
@@ -822,6 +824,7 @@ and no FETCH-TRACES argument is passed."
                                                        recurse))))
 
 (defun slime-trace-dialog-next-button (&optional goback)
+  "Move to next button in slime-trace-dialog view."
   (interactive)
   (let ((finder (if goback
                     #'previous-single-property-change
@@ -832,6 +835,7 @@ and no FETCH-TRACES argument is passed."
              until (get-text-property pos 'action))))
 
 (defun slime-trace-dialog-prev-button ()
+  "Move to previous button in slime-trace-dialog view."
   (interactive)
   (slime-trace-dialog-next-button 'goback))
 
