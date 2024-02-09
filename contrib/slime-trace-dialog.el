@@ -11,6 +11,7 @@
 (require 'slime-parse)
 (require 'slime-repl)
 (require 'cl-lib)
+(require 'browse-url)
 
 (define-slime-contrib slime-trace-dialog
   "Provide an interfactive trace dialog buffer for managing and
@@ -402,6 +403,12 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
 
 ;;;; Handlers for the *trace-dialog* and *trace-detail* buffers
 ;;;
+
+(defun slime-trace-dialog--show-help ()
+  "Show help for slime-trace-dialog."
+  (interactive)
+  (browse-url "https://slime.common-lisp.dev/doc/html/SLIME-Trace-Dialog.html"))
+
 (defun slime-trace-dialog--open-specs (traced-specs)
   (cl-labels ((make-report-spec-fn
                (&optional form)
@@ -431,7 +438,7 @@ inspecting details of traced functions. Invoke this dialog with C-c T."
        " "
        (slime-trace-dialog--button "[help]"
                                    (lambda (_btn)
-                                     (slime-trace-dialog--open-help-buffer)))
+                                     (slime-trace-dialog--show-help)))
        "\n\n")
       (insert
        (slime-trace-dialog--format "Traced specs (%s)" (length traced-specs))
@@ -841,7 +848,8 @@ If RECURSE is true, fetch until there are no more to fetch."
 
 (defun slime-trace-dialog-toggle-backtraces (&optional arg)
   "Toggle the recording of backtraces of traced calls.
-Beware that the enabling of backtraces can have a performance impact in your program. "
+Beware that the enabling of backtraces can have a performance
+impact in your program."
   (interactive
    (list
     (if current-prefix-arg
